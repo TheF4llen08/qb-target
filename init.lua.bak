@@ -1,0 +1,947 @@
+function Load(name)
+	local resourceName = GetCurrentResourceName()
+	local chunk = LoadResourceFile(resourceName, ('data/%s.lua'):format(name))
+	if chunk then
+		local err
+		chunk, err = load(chunk, ('@@%s/data/%s.lua'):format(resourceName, name), 't')
+		if err then
+			error(('\n^1 %s'):format(err), 0)
+		end
+		return chunk()
+	end
+end
+
+-------------------------------------------------------------------------------
+-- Settings
+-------------------------------------------------------------------------------
+
+Config = {}
+
+-- It's possible to interact with entities through walls so this should be low
+Config.MaxDistance = 5.0
+
+-- Enable debug options
+Config.Debug = false
+
+-- Supported values: true, false
+Config.Standalone = false
+
+-- Enable outlines around the entity you're looking at
+Config.EnableOutline = false
+
+-- Enable default options (Toggling vehicle doors)
+Config.EnableDefaultOptions = false
+
+-- Disable the target eye whilst being in a vehicle
+Config.DisableInVehicle = false
+
+-- Key to open the target
+Config.OpenKey = 'LMENU' -- Left Alt
+Config.OpenControlKey = 19 -- Control for keypress detection also Left Alt for the eye itself, controls are found here https://docs.fivem.net/docs/game-references/controls/
+
+-- Key to open the menu
+Config.MenuControlKey = 238 -- Control for keypress detection on the context menu, this is the Right Mouse Button, controls are found here https://docs.fivem.net/docs/game-references/controls/
+
+-------------------------------------------------------------------------------
+-- Target Configs
+-------------------------------------------------------------------------------
+
+-- These are all empty for you to fill in, refer to the .md files for help in filling these in
+
+Config.CircleZones = {
+
+}
+
+Config.BoxZones = {
+
+["vehicleshop"] = {
+    name = "Vehicle Tablet 1",
+    coords = vector3(-794.49, -234.47, 37.08),
+    length = 1.50,
+    width = 1.90,
+    heading = 0.0,
+    debugPoly = false,
+    minZ = 36.08,
+    maxZ = 38.30,
+    options = {
+        {
+          type = "client",
+          event = "qb-vehicleshop:client:showVehOptions",
+          icon = "fas fa-sign-in-alt",
+          label = "Sign In",
+          job = "cardealer",
+        },
+    },
+    distance = 2.5
+},
+["vehicleshop2"] = {
+    name = "Vehicle Tablet 2",
+    coords = vector3(-791.71, -239.37, 37.08),
+    length = 1.50,
+    width = 1.90,
+    heading = 0.0,
+    debugPoly = false,
+    minZ = 36.08,
+    maxZ = 38.30,
+    options = {
+        {
+          type = "client",
+          event = "qb-vehicleshop:client:showVehOptions",
+          icon = "fas fa-sign-in-alt",
+          label = "Sign In",
+          job = "cardealer",
+        },
+    },
+    distance = 2.5
+},
+["vehicleshop3"] = {
+    name = "Vehicle Tablet 3",
+    coords = vector3(-789.07, -243.86, 37.08),
+    length = 1.50,
+    width = 1.90,
+    heading = 0.0,
+    debugPoly = false,
+    minZ = 36.08,
+    maxZ = 38.30,
+    options = {
+        {
+          type = "client",
+          event = "qb-vehicleshop:client:showVehOptions",
+          icon = "fas fa-sign-in-alt",
+          label = "Sign In",
+          job = "cardealer",
+        },
+    },
+    distance = 2.5
+},
+["vehicleshop4"] = {
+    name = "Vehicle Tablet 4",
+    coords = vector3(-786.19, -228.65, 37.08),
+    length = 1.50,
+    width = 1.90,
+    heading = 0.0,
+    debugPoly = false,
+    minZ = 36.08,
+    maxZ = 38.30,
+    options = {
+        {
+          type = "client",
+          event = "qb-vehicleshop:client:showVehOptions",
+          icon = "fas fa-sign-in-alt",
+          label = "Sign In",
+          job = "cardealer",
+        },
+    },
+    distance = 2.5
+},
+    ["boxzone1"] = {
+        name = "MissionRowDutyClipboard",
+        coords = vector3(441.7989, -982.0529, 30.67834),
+        length = 0.45,
+        width = 0.35,
+        heading = 11.0,
+        debugPoly = false,
+        minZ = 30.77834,
+        maxZ = 30.87834,
+        options = {
+            {
+              type = "client",
+              event = "qb-policejob:ToggleDuty",
+              icon = "fas fa-sign-in-alt",
+              label = "Sign In",
+              job = "police",
+            },
+        },
+        distance = 2.5
+},
+    ["MRPDArmory"] = {
+        name = "MRPDArmory",
+        coords = vector3(481.41, -994.57, 30.69),
+        length = 2.0,
+        width = 3.4,
+        heading = 0,
+        debugPoly = false,
+        minZ=29.69,
+        maxZ=32.29,
+        options = {
+            {
+                type = "client",
+                event = "qb-police:Armory",
+                icon = "fas fa-clipboard",
+                label = "Access Armory",
+                job = "police",
+            },
+        },
+        distance = 3.5
+    },
+["fingerprint"] = {
+        name = "fingerprint",
+        coords = vector3(473.19, -1006.86, 26.27),
+        length = 1.0,
+        width = 1.6,
+        heading = 6.39,
+        debugPoly = false,
+        minZ = 24.79,
+        maxZ = 34.04,
+        options = {
+            {
+                type = "client",
+                event = "police:server:showFingerprint",
+                icon = "fas fa-fingerprint",
+                label = "Fingerprint Station",
+                job = "police",
+            },
+        },
+        distance = 1.5
+    },
+["emsduty"] = {
+		name = "emsduty",
+		coords = vector3(306.81, -597.51, 43.28),
+		length = 1.5,
+		width = 2.0,
+		heading = 338.94,
+		debugPoly = false,
+		minZ = 42.28,
+		MaxZ = 44.28,
+		options = {
+			{
+				type = "client",
+				event = "EMSToggle:Duty",
+				icon = "fas fa-clipboard",
+				label = "Go On/Off Duty",
+				job = "ambulance",
+			},
+		},
+		distance = 2.0,
+	},
+["emsarmory"] = {
+		name = "emsarmory", 
+		coords = vector3(306.97, -602.25, 42.28),
+		length = 1.5,
+		width = 2.7,
+		heading = 144.38,
+		debugPoly= false,
+		minZ = 41.28,
+		maxZ = 45.12,
+		options = {
+			{
+				type = "client",
+				event = "EMS:client:openarmory",
+				icon = "fas fa-clipboard",
+				label = "EMS Armory",
+				job = "ambulance",
+			},
+		},
+		distance = 2.0,
+	},
+["emspstash"] = {
+		name = "EMSPStash",
+		coords = vector3(302.08, -599.27, 43.28),
+		length = 2,
+		width = 2.8,
+		heading = 61.62,
+		debugPoly = false,
+		minZ = 41.28,
+		maxZ = 45.28,
+		options = {
+			{
+				type = "client",
+				event = "hospital:client:stashpersonal",
+				icon = "fas fa-clipboard",
+				label = "Personal Stash",
+				job = "ambulance"
+			},
+		},
+		distance = 2.0,
+	},
+["PDEvidence"] = {
+        name = "PDEvidence",
+        coords = vector3(475.73, -995.9, 26.31),
+        length = 2,
+        width = 2.5,
+        heading = 135,
+        debugPoly = false,
+        minZ = 24.33,
+        maxZ = 35.33,
+        options = {
+            {
+                type = "client",
+                event = "MRPDPoliceArmory",
+                icon = "fas fa-clipboard",
+                label = "Open Evidence Box",
+                job = "police"
+            }
+        },
+        distance = 1.5
+    },
+
+}
+
+Config.PolyZones = {
+
+}
+
+Config.TargetBones = {
+
+["main"] = {
+        bones = {
+            "door_dside_f",
+            "door_dside_r",
+            "door_pside_f",
+            "door_pside_r"
+        },
+        options = {
+			{
+                type = "client",
+                event = "vehicle:flipit",
+                icon = "fas fa-car-crash",
+                label = "Flip Vehicle",
+            },
+            {
+                type = "client",
+                event = "police:client:PutPlayerInVehicle",
+                icon = "fas fa-chevron-circle-left",
+                label = "Place In The Vehicle",
+            },
+            {
+                type = "client",
+                event = "police:client:SetPlayerOutVehicle",
+                icon = "fas fa-chevron-circle-right",
+                label = "Take Out Of The Vehicle",
+            },
+            {
+                type = "client",
+                event = "police:client:ImpoundVehicle",
+                icon = "fas fa-cut",
+                label = "Impound Vehicle",
+                job = 'police'
+            },
+            {
+                type = "client",
+                event = "qb-trunk:client:GetIn",
+                icon = "fab fa-angellist",
+                label = "Get In The Trunk",
+            },
+		},
+	},
+}
+
+Config.TargetEntities = {
+
+}
+
+Config.TargetModels = {
+    ["VehicleRental"] = {
+        models = {
+            `a_m_y_business_03`,
+        },
+        options = {
+            {
+                type = "client",
+                event = "qb-rental:openMenu",
+                icon = "fas fa-car",
+                label = "Rent Vehicle",
+            },
+        },
+        distance = 4.0
+	},
+	  ["bike"] = {
+        models = {
+            `bmx`,
+            `bimx`,
+        },
+        options = {
+            {
+                type = "event",
+                event = "pickup:bike",
+                parameters = {},
+                icon = "fas fa-bicycle",
+                label = "Pickup Bike",
+            },
+        },
+        distance = 1.0
+    },
+["trashsearch"] = {
+        models = {
+	-1096777189,
+	666561306,
+	1437508529,
+	-1426008804,
+	-228596739,
+	161465839,
+	651101403,
+        -58485588,
+        218085040,
+        -206690185,
+
+        },
+        options = {
+            {
+                type = "client",
+                event = "qb-trashsearch:client:searchtrash",
+                icon = "fas fa-dumpster",
+                label = "Dumpster Dive",
+            },
+        },
+        distance = 3.0
+    },
+
+}
+Config.GlobalPedOptions = {
+
+}
+
+Config.GlobalVehicleOptions = {
+
+}
+
+Config.GlobalObjectOptions = {
+
+}
+
+Config.GlobalPlayerOptions = {
+
+}
+
+Config.Peds = {
+	["Shops"] = {
+		model = 'mp_m_shopkeep_01', 
+		coords = vector4(-47.51, -1758.78, 29.42, 49.08),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = { 
+			options = {
+				{
+					type = "client",
+					event = 'qb-shops:marketshop',
+					icon = "fas fa-shopping-cart",
+					label = "Open Shop",
+				},
+			},
+			distance = 1.5,
+		},
+	},
+	["Hardware"] = {
+		model = 'mp_m_waremech_01', 
+		coords = vector4(-421.83, 6136.09, 31.87, 225.39),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = { 
+			options = {
+				{
+					type = "client",
+					event = 'qb-shops:marketshop',
+					icon = "fas fa-shopping-cart",
+					label = "Open Shop",
+				},
+			},
+			distance = 1.5,
+		},
+	},
+	["ammunationshops"] = {
+		model = 's_m_y_ammucity_01', 
+		coords = vector4(-661.98, -933.57, 20.80, 181.76),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = { 
+            options = {
+                {
+                    type = "client",
+                    event = "qb-shops:marketshop",
+                    icon = "fas fa-shopping-cart",
+                    label = "Buy Weapons",
+                },
+            },
+            distance = 2.5,
+		},
+    },
+	{
+        model = 'mp_m_shopkeep_01',
+        coords = vector4(-3242.23, 999.97, 11.85, 351.66),
+        gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+    },
+    {
+        model = 'mp_m_shopkeep_01',
+        coords = vector4(24.5, -1346.63, 28.60, 273.18),
+        gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+    },
+    {
+        model = 'mp_m_shopkeep_01',
+        coords = vector4(-47.18, -1758.46, 28.45, 39.64),
+        gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+    },
+    {
+        model = 'mp_m_shopkeep_01',
+        coords = vector4(-706.02, -913.9, 18.35, 86.17),
+        gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+    },
+    {
+        model = 'mp_m_shopkeep_01',
+		coords = vector4(-1486.75, -377.57, 39.20, 132.60),
+		gender = 'male',
+		freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+    	-- San Andreas Ave Robs Liquor
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(-1221.30, -907.82, 11.40, 34.60),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Carrson Ave
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(372.6, 327.06, 102.55, 258.49),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- North Rockford
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(-1819.96, 794.04, 137.10, 126.36),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Great Ocean South
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(-3039.89, 584.21, 6.90, 16.15),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Great Ocean Robs Liquor
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(-2966.41, 391.62, 14.05, 84.40),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Mirror Park
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(1164.72, -323.04, 68.25, 93.92),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Vespucci Boulevard Robs Liquor
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(1134.32, -983.25, 45.45, 278.23),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Route 68
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(549.24, 2670.37, 41.25, 94.15),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Sandy
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(1959.72, 3740.68, 31.40, 297.43),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Sandy Shores Robs Liquor
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(1165.25, 2710.80, 38.16, 183.01),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Grape Seed
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(1697.8, 4923.14, 41.10, 321.33),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Great Ocean North
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(1728.33, 6416.21, 35.04, 241.78),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- LS Freeway
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(2677.32, 3279.69, 54.30, 323.82),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Paleto
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(161.43, 6642.52, 31.70, 225.18),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Paleto Robs Liquor
+	{
+		model = 'mp_m_shopkeep_01',
+		coords = vector4(-160.53, 6320.84, 31.59, 312.67),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+
+	-- Ammunations
+    {   ----vesspuci
+		model = 's_m_y_ammucity_01',
+		coords = vector4(-661.98, -933.57, 20.80, 181.76),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Legion Square
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(22.59, -1105.55, 28.80, 159.83),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Popular Street
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(810.21, -2159.02, 28.60, 1.43),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Vespucci Boulevard
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(842.42, -1035.31, 27.20, 358.67),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Vinewood Hills
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(253.87, -50.58, 68.95, 67.39),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Palomino Freeway
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(2567.97, 292.64, 107.80, 358.18),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Route 68
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(-1118.98, 2699.77, 17.60, 223.39),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Sandy Shores
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(1692.21, 3760.91, 33.70, 229.39),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+	-- Paleto
+	{
+		model = 's_m_y_ammucity_01',
+		coords = vector4(-331.61, 6084.92, 30.55, 226.57),
+		gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+	},
+    ---------------------------------------------------------------------------------
+    {  -------Youtool Shop------
+        model = 'mp_m_waremech_01',
+        coords = vector4(45.48, -1748.85, 28.55, 55.1),
+        gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+    },
+    {  -------Youtool Shop------
+        model = 'mp_m_waremech_01',
+        coords = vector4(2748.07, 3472.72, 54.70, 238.96),
+        gender = 'male',
+        freeze = true,
+        invincible = true,
+        blockevents = true,
+    },
+	["Cityhall"] = {
+		model = 'cs_barry',
+		coords = vector4(-545.33, -203.72, 38.22, 204.64),
+		minusOne = true,
+		freeze = true,
+		invincible = true,
+		blockevents = true,
+		target = {
+			options = {
+				{
+					type = "client",
+					event = "qb-cityhall:client:openmenu",
+					icon = "fas fa-store",
+					label = 'City Services',
+				},
+			},
+			distance = 2.5,
+		},
+		currentpednumber = 0,
+	},
+	["OxyPed"] = {
+		model = 'a_m_m_og_boss_01', 
+		coords = vector4(-1235.64, -1191.45, 7.67, 195.1),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		scenario = 'WORLD_HUMAN_DRUG_DEALER',
+		target = { 
+			options = {
+				{
+					type= "client",
+					event = "oxydelivery:startDealing",
+					icon = "fas fa-user-secret",
+					label = "Start Oxy",
+				},
+			},
+		 distance = 3,
+	 	},
+	},
+	["greenlaptop"] = {
+		model = 'a_m_m_fatlatin_01', 
+		coords = vector4(967.21, -1858.60, 31.20, 83.3),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = {
+			options = {
+				{
+					type= "client",
+					event = "qb-bankrobbery:client:BuyGreenLaptop",
+					icon = "fas fa-user-secret",
+					label = "Buy Laptop",
+				},
+			},
+		 distance = 3,
+	 	},
+	},
+	["bluelaptop"] = {
+		model = 'a_f_m_tourist_01', 
+		coords = vector4(-128.77, 188.23, 85.43, 112.0),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = {
+			options = {
+				{
+					type= "client",
+					event = "qb-bankrobbery:client:BuyBlueLaptop",
+					icon = "fas fa-user-secret",
+					label = "Buy Laptop",
+				},
+			},
+		 distance = 3,
+	 	},
+	},
+	["redLaptop"] = {
+		model = 'a_f_y_tourist_02', 
+		coords = vector4(1386.11, -783.42, 67.44, 223.8),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = {
+			options = {
+				{
+					type= "client",
+					event = "qb-bankrobbery:client:BuyRedLaptop",
+					icon = "fas fa-user-secret",
+					label = "Buy Laptop",
+				},
+			},
+		 distance = 3,
+	 	}, 
+	},
+	["goldlaptop"] = {
+		model = 'a_f_o_soucent_01', 
+		coords = vector4(-837.74, -405.76, 31.47, 317.6),
+		minusOne = true, 
+		freeze = true, 
+		invincible = true, 
+		blockevents = true,
+		target = {
+			options = {
+				{
+					type= "client",
+					event = "qb-bankrobbery:client:BuyGoldLaptop",
+					icon = "fas fa-user-secret",
+					label = "Buy Laptop",
+				},
+			},
+		 distance = 3,
+	 	},
+	},
+
+}
+
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
+local function JobCheck() return true end
+local function GangCheck() return true end
+local function ItemCount() return true end
+local function CitizenCheck() return true end
+
+CreateThread(function()
+	if not Config.Standalone then
+		local QBCore = exports['qb-core']:GetCoreObject()
+		local PlayerData = QBCore.Functions.GetPlayerData()
+
+		ItemCount = function(item)
+			for _, v in pairs(PlayerData.items) do
+				if v.name == item then
+					return true
+				end
+			end
+			return false
+		end
+
+		JobCheck = function(job)
+			if type(job) == 'table' then
+				job = job[PlayerData.job.name]
+				if job and PlayerData.job.grade.level >= job then
+					return true
+				end
+			elseif job == 'all' or job == PlayerData.job.name then
+				return true
+			end
+			return false
+		end
+
+		GangCheck = function(gang)
+			if type(gang) == 'table' then
+				gang = gang[PlayerData.gang.name]
+				if gang and PlayerData.gang.grade.level >= gang then
+					return true
+				end
+			elseif gang == 'all' or gang == PlayerData.gang.name then
+				return true
+			end
+			return false
+		end
+
+		CitizenCheck = function(citizenid)
+			return citizenid == PlayerData.citizenid or citizenid[PlayerData.citizenid]
+		end
+
+		RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+			PlayerData = QBCore.Functions.GetPlayerData()
+			SpawnPeds()
+		end)
+
+		RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+			PlayerData = {}
+			DeletePeds()
+		end)
+
+		RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
+			PlayerData.job = JobInfo
+		end)
+
+		RegisterNetEvent('QBCore:Client:OnGangUpdate', function(GangInfo)
+			PlayerData.gang = GangInfo
+		end)
+
+		RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
+			PlayerData = val
+		end)
+	else
+		local firstSpawn = false
+		AddEventHandler('playerSpawned', function()
+			if not firstSpawn then
+				SpawnPeds()
+				firstSpawn = true
+			end
+		end)
+	end
+end)
+
+function CheckOptions(data, entity, distance)
+	if distance and data.distance and distance > data.distance then return false end
+	if data.job and not JobCheck(data.job) then return false end
+	if data.gang and not GangCheck(data.gang) then return false end
+	if data.item and not ItemCount(data.item) then return false end
+	if data.citizenid and not CitizenCheck(data.citizenid) then return false end
+	if data.canInteract and not data.canInteract(entity, distance, data) then return false end
+	return true
+end
