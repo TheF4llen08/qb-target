@@ -41,3 +41,8 @@ The TEMPLATES.md and EXAMPLES.md are always being improved and new examples can 
 
 ## Issues and Suggestions
 Please use the GitHub issues system to report issues or make suggestions, when making suggestion, please keep `[Suggestion]` in the title to make it clear that it is a suggestion or join the [discord](https://discord.gg/qbcore).
+
+
+Sorry for the crappy quality
+https://i.gyazo.com/79b8964a96f7ea219d7a570c064c6d35.png
+https://i.gyazo.com/21fe559da5ed562ba92bef9c2c6dead7.png
