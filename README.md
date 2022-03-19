@@ -44,5 +44,5 @@ Please use the GitHub issues system to report issues or make suggestions, when m
 
 
 Sorry for the crappy quality
-https://i.gyazo.com/79b8964a96f7ea219d7a570c064c6d35.png
+https://gyazo.com/21fe559da5ed562ba92bef9c2c6dead7
 https://i.gyazo.com/21fe559da5ed562ba92bef9c2c6dead7.png
